@@ -5,9 +5,9 @@ services:
   osservice:
     stdin_open: true
     tty: true
-    container_name: osservice
-    hostname: osservice
-    image: osservice
+    container_name: ${CONTAINER}
+    hostname: ${PROJECT_NAME}
+    image: ${DOCKER_USER}/${PROJECT_NAME}:${DOCKER_TAG}
     build:
       context: .
       dockerfile: dockerfile/Dockerfile

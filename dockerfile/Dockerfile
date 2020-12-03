@@ -1,7 +1,7 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 1st - Dependencies
 #
-FROM golang:alpine as builder
+FROM golang:1.15.5 as builder
 
 WORKDIR /osservice
 
