@@ -6,7 +6,7 @@ import (
 	_ "github.com/nakagami/firebirdsql"
 )
 
-func KonnektCWB() (db *sql.DB, err error) {
+func Konnekt() (db *sql.DB, err error) {
 
 	// dbcwb := os.Getenv("CWB")
 
