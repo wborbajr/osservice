@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+
+  osservice:
+    stdin_open: true
+    tty: true
+    container_name: osservice
+    hostname: osservice
+    image: osservice
+    build:
+      context: .
+      dockerfile: dockerfile/Dockerfile
+    volumes:
+      - $PWD/.:/osservice:rw
+    # depends_on:
+    #   - database
+    networks:
+      - infra
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+networks:
+  infra:
+    driver: bridge
