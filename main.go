@@ -1,27 +1,34 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
 
-	_ "github.com/nakagami/firebirdsql"
+	"github.com/wborbajr/osservice/config"
+	"github.com/wborbajr/osservice/models"
+	_struct "github.com/wborbajr/osservice/struct"
 )
 
-// var (
-// 	DB_HOST="192.168.0.2"
-// 	DB_PORT="3050"
-// 	DB_DATABASE="C:\\Program Files (x86)\\CompuFour\\Clipp\\Base\\CLIPP.FDB"
-// 	DB_USERNAME="SYSDBA"
-// 	DB_PASSWORD="masterkey"
-// 	DB_CHARSET="WIN1252"
-// )
-
 func main() {
-	var n int
-	conn, _ := sql.Open("firebirdsql", "SYSDBA:masterkey@192.168.0.2C:\\Program Files (x86)\\CompuFour\\Clipp\\Base\\CLIPP.FDB")
-	defer conn.Close()
 
-	conn.QueryRow("SELECT Count(*) FROM rdb$relations").Scan(&n)
+	var response _struct.ResponseData
 
-	fmt.Println("Relations count = ", n)
+	db, err := config.Konnekt()
+	if err != nil {
+		fmt.Println("Error connecting database! Exiting.")
+		db.Close()
+	}
+
+	_models := models.ModelGetData{DB:db}
+	IsiData, err2 := _models.GetOS()
+
+	if err2 != nil {
+		fmt.Println("Error retrieving data.")
+		db.Close()
+	}
+
+	response.Data = IsiData
+
+	defer db.Close()
+
+	fmt.Println("Relations count = %s", response)
 }
