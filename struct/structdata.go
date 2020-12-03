@@ -1,7 +1,7 @@
 package _struct
 
 type StructData struct {
-	Id int64 `json:"id"`
-	FirstName string `json:"first_name"`
-	LastName string `json:"last_name"`
+	IdOs int64 `json:"id_os"`
+	IdCliente string `json:"id_cliente"`
+	IdStatus string `json:"id_status"`
 }
