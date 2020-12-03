@@ -2,11 +2,25 @@ package config
 
 import (
 	"database/sql"
+	"os"
 
 	_ "github.com/nakagami/firebirdsql"
 )
 
-func Konnekt() (db *sql.DB, err error) {
+func KonnektCWB() (db *sql.DB, err error) {
+
+	dbcwb := os.Getenv("CWB")
+
+	db, err = sql.Open("firebirdsql", dbcwb)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return db, nil
+}
+
+func KonnektLON() (db *sql.DB, err error) {
 	db, err = sql.Open("firebirdsql", "SYSDBA:masterkey@192.168.0.2/C:/Program Files (x86)/CompuFour/Clipp/Base/CLIPP.FDB?charset=WIN1252")
 
 	if err != nil {
@@ -15,3 +29,35 @@ func Konnekt() (db *sql.DB, err error) {
 
 	return db, nil
 }
+
+func KonnektNAT() (db *sql.DB, err error) {
+	db, err = sql.Open("firebirdsql", "SYSDBA:masterkey@192.168.0.2/C:/Program Files (x86)/CompuFour/Clipp/Base/CLIPP.FDB?charset=WIN1252")
+
+	if err != nil {
+		return nil, err
+	}
+
+	return db, nil
+}
+
+func KonnektREC() (db *sql.DB, err error) {
+	db, err = sql.Open("firebirdsql", "SYSDBA:masterkey@192.168.0.2/C:/Program Files (x86)/CompuFour/Clipp/Base/CLIPP.FDB?charset=WIN1252")
+
+	if err != nil {
+		return nil, err
+	}
+
+	return db, nil
+}
+
+func KonnektARA() (db *sql.DB, err error) {
+	db, err = sql.Open("firebirdsql", "SYSDBA:masterkey@192.168.0.2/C:/Program Files (x86)/CompuFour/Clipp/Base/CLIPP.FDB?charset=WIN1252")
+
+	if err != nil {
+		return nil, err
+	}
+
+	return db, nil
+}
+
+

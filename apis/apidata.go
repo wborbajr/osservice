@@ -11,7 +11,7 @@ import (
 
 func GetOS(response http.ResponseWriter, r *http.Request) {
 
-	db, err := config.Konnekt()
+	db, err := config.KonnektCWB()
 	var Response _struct.ResponseData
 
 	if err != nil {
