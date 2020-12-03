@@ -13,7 +13,7 @@ type ModelGetData struct {
 
 func (model ModelGetData) GetOS() (getStruct []_struct.StructData, err error) {
 
-	row, err := model.DB.Query("SELECT ID_OS, ID_CLIENTE, ID_STATUS FORM TB_OS")
+	row, err := model.DB.Query("SELECT ID_OS, ID_CLIENTE, ID_STATUS FROM TB_OS;")
 
 	if err != nil {
 		return nil, err

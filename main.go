@@ -15,15 +15,15 @@ func main() {
 
 	db, err := config.Konnekt()
 	if err != nil {
-		fmt.Println("Error connecting database! Exiting.")
+		log.Fatal("Error connecting database! Exiting. ", err)
 		db.Close()
 	}
 
 	_models := models.ModelGetData{DB:db}
-	IsiData, err2 := _models.GetOS()
+	IsiData, err := _models.GetOS()
 
-	if err2 != nil {
-		log.Fatal("Error retrieving data. ", err2)
+	if err != nil {
+		log.Fatal("Error retrieving data. ", err)
 		db.Close()
 	}
 
