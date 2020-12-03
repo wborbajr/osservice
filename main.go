@@ -1,35 +1,24 @@
 package main
 
 import (
-	"fmt"
 	"log"
+	"net/http"
 
-	"github.com/wborbajr/osservice/config"
-	"github.com/wborbajr/osservice/models"
-	_struct "github.com/wborbajr/osservice/struct"
+	"github.com/gorilla/mux"
+
+	"github.com/wborbajr/osservice/apis"
 )
 
 func main() {
 
-	var response _struct.ResponseData
+	router := mux.NewRouter()
 
-	db, err := config.Konnekt()
-	if err != nil {
-		log.Fatal("Error connecting database! Exiting. ", err)
-		db.Close()
-	}
+	router.HandleFunc("/osservice/getos",apis.GetOS).Methods("GET")
 
-	_models := models.ModelGetData{DB:db}
-	IsiData, err := _models.GetOS()
+	err := http.ListenAndServe(":3001",router)
 
 	if err != nil {
-		log.Fatal("Error retrieving data. ", err)
-		db.Close()
+		log.Println(err)
 	}
 
-	response.Data = IsiData
-
-	defer db.Close()
-
-	fmt.Println("Relations count = %s", response)
 }
