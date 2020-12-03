@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/wborbajr/osservice/config"
 	"github.com/wborbajr/osservice/models"
@@ -22,7 +23,7 @@ func main() {
 	IsiData, err2 := _models.GetOS()
 
 	if err2 != nil {
-		fmt.Println("Error retrieving data.")
+		log.Fatal("Error retrieving data. ", err2)
 		db.Close()
 	}
 
