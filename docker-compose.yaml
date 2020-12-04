@@ -2,6 +2,23 @@ version: "3.8"
 
 services:
 
+  firebird:
+    image: jacobalberty/firebird
+    container_name: firebird
+    hostname: firebird
+    ports:
+       - 3050:3050
+    restart: always
+    volumes:
+      - $PWD/fdb:/firebird/data/
+    networks:
+      - infra
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+
   osservice:
     stdin_open: true
     tty: true
