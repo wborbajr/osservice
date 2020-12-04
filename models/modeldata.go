@@ -11,9 +11,12 @@ type ModelGetData struct {
 	DB *sql.DB
 }
 
-func (model ModelGetData) GetOS() (getStruct []_struct.StructData, err error) {
+func (model ModelGetData) GetOS(doc string, os string) (getStruct []_struct.StructData, err error) {
 
-	row, err := model.DB.Query("SELECT ID_OS, ID_CLIENTE, ID_STATUS FROM TB_OS WHERE ID_OS = 117949;")
+	// doc := "6001"
+	// os := "1001"
+
+	row, err := model.DB.Query("SELECT ID_OS, ID_CLIENTE, ID_STATUS FROM TB_OS WHERE ID_OS = ? AND ID_CLIENTE = ?;", os, doc)
 
 	if err != nil {
 		return nil, err

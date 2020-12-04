@@ -2,37 +2,50 @@ package apis
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	"github.com/wborbajr/osservice/config"
 	"github.com/wborbajr/osservice/models"
 	_struct "github.com/wborbajr/osservice/struct"
 )
 
-func GetOS(response http.ResponseWriter, r *http.Request) {
+func GetOS(w http.ResponseWriter, r *http.Request) {
 
-	db, err := config.Konnekt()
+	w.Header().Set("Content-Type", "application/json")
+
+	params := mux.Vars(r)
+
+	if params["doc"] != "" && params["os"] != "" {
+		fmt.Println(params["doc"], params["os"])
+	}
+
+	doc := params["doc"]
+	os := params["os"]
+
+	db, err := config.Konnekt_ara()
 	var Response _struct.ResponseData
 
 	if err != nil {
 		Response.Status = http.StatusInternalServerError
 		Response.Message = err.Error()
 		Response.Data = nil
-		restponWithJson(response, http.StatusInternalServerError, Response)
+		restponWithJson(w, http.StatusInternalServerError, Response)
 	}  else {
 		_models := models.ModelGetData{DB:db}
-		IsiData, err2 := _models.GetOS()
+		IsiData, err2 := _models.GetOS(doc, os)
 		if err2 != nil {
 			Response.Status = http.StatusInternalServerError
 			Response.Message = err2.Error()
 			Response.Data = nil
-			restponWithJson(response, http.StatusInternalServerError, Response)
+			restponWithJson(w, http.StatusInternalServerError, Response)
 
 		} else {
 			Response.Status = http.StatusOK
 			Response.Message = "Sukses"
 			Response.Data = IsiData
-			restponWithJson(response, http.StatusOK, Response)
+			restponWithJson(w, http.StatusOK, Response)
 
 		}
 	}

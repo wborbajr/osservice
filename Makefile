@@ -56,6 +56,10 @@ start:
 
 stop:
 	@echo "\nStoping container...\n"
+	docker-compose -f ${DOCKERFILE} down --remove-orphans
+
+stopall:
+	@echo "\nStoping container...\n"
 	docker-compose -f ${DOCKERFILE} down --remove-orphans --rmi all
 
 exec:

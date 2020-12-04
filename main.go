@@ -13,7 +13,7 @@ func main() {
 
 	router := mux.NewRouter()
 
-	router.HandleFunc("/osservice/getos",apis.GetOS).Methods("GET")
+	router.HandleFunc("/osservice/getos/{doc}/{os}",apis.GetOS).Methods("GET")
 
 	err := http.ListenAndServe(":3001",router)
 

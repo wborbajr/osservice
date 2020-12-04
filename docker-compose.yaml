@@ -2,15 +2,23 @@ version: "3.8"
 
 services:
 
-  firebird:
+  firebird_ara:
     image: jacobalberty/firebird
-    container_name: firebird
+    container_name: firebird_ara
     hostname: firebird
+    environment:
+      FIREBIRD_DATABASE: "CLIPP_ARA.FDB"
+      FIREBIRD_USER: "SYSDBA"
+      ISC_PASSWORD: "masterkey"
+      # - FIREBIRD_USER:SYSDBA
+      # - FIREBIRD_PASSWORD:masterkey
     ports:
-       - 3050:3050
+       - 3051:3050
     restart: always
     volumes:
       - $PWD/fdb:/firebird/data/
+      # - $PWD/fbconf/SYSDBA.password:/firebird/etc/
+      # - $PWD/fbconf/firebird.conf:/firebird/etc/
     networks:
       - infra
     logging:
@@ -18,6 +26,108 @@ services:
       options:
         max-size: "10m"
         max-file: "5"
+
+  firebird_cwb:
+    image: jacobalberty/firebird
+    container_name: firebird_cwb
+    hostname: firebird
+    environment:
+      FIREBIRD_DATABASE: "CLIPP_CWB.FDB"
+      FIREBIRD_USER: "SYSDBA"
+      ISC_PASSWORD: "masterkey"
+      # - FIREBIRD_USER:SYSDBA
+      # - FIREBIRD_PASSWORD:masterkey
+    ports:
+       - 3052:3050
+    restart: always
+    volumes:
+      - $PWD/fdb:/firebird/data/
+      # - $PWD/fbconf/SYSDBA.password:/firebird/etc/
+      # - $PWD/fbconf/firebird.conf:/firebird/etc/
+    networks:
+      - infra
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  firebird_lon:
+    image: jacobalberty/firebird
+    container_name: firebird_lon
+    hostname: firebird
+    environment:
+      FIREBIRD_DATABASE: "CLIPP_LON.FDB"
+      FIREBIRD_USER: "SYSDBA"
+      ISC_PASSWORD: "masterkey"
+      # - FIREBIRD_USER:SYSDBA
+      # - FIREBIRD_PASSWORD:masterkey
+    ports:
+       - 3053:3050
+    restart: always
+    volumes:
+      - $PWD/fdb:/firebird/data/
+      # - $PWD/fbconf/SYSDBA.password:/firebird/etc/
+      # - $PWD/fbconf/firebird.conf:/firebird/etc/
+    networks:
+      - infra
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  firebird_nat:
+    image: jacobalberty/firebird
+    container_name: firebird_nat
+    hostname: firebird
+    environment:
+      FIREBIRD_DATABASE: "CLIPP_NAT.FDB"
+      FIREBIRD_USER: "SYSDBA"
+      ISC_PASSWORD: "masterkey"
+      # - FIREBIRD_USER:SYSDBA
+      # - FIREBIRD_PASSWORD:masterkey
+    ports:
+       - 3054:3050
+    restart: always
+    volumes:
+      - $PWD/fdb:/firebird/data/
+      # - $PWD/fbconf/SYSDBA.password:/firebird/etc/
+      # - $PWD/fbconf/firebird.conf:/firebird/etc/
+    networks:
+      - infra
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  firebird_rec:
+    image: jacobalberty/firebird
+    container_name: firebird_rec
+    hostname: firebird
+    environment:
+      FIREBIRD_DATABASE: "CLIPP_REC.FDB"
+      FIREBIRD_USER: "SYSDBA"
+      ISC_PASSWORD: "masterkey"
+      # - FIREBIRD_USER:SYSDBA
+      # - FIREBIRD_PASSWORD:masterkey
+    ports:
+       - 3055:3050
+    restart: always
+    volumes:
+      - $PWD/fdb:/firebird/data/
+      # - $PWD/fbconf/SYSDBA.password:/firebird/etc/
+      # - $PWD/fbconf/firebird.conf:/firebird/etc/
+    networks:
+      - infra
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+
 
   osservice:
     stdin_open: true
