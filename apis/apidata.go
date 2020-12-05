@@ -46,10 +46,10 @@ func GetOS(w http.ResponseWriter, r *http.Request) {
 		}()
 	}
 
-	IsiData, _ := <-chanret
+	IsiData, err := <-chanret
 
 	// fmt.Println( <-chanret )
-		fmt.Println(IsiData)
+		fmt.Println(err)
 
 	// if err {
 	// 	fmt.Println("ERR")
