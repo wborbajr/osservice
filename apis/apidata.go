@@ -24,6 +24,7 @@ func GetOS(w http.ResponseWriter, r *http.Request) {
 	doc := params["doc"]
 	os := params["os"]
 
+	fmt.Println("Konnekt_ara()")
 	db, err := config.Konnekt_ara()
 	var Response _struct.ResponseData
 
