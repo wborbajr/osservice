@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"sync"
 
 	"github.com/gorilla/mux"
 	"github.com/wborbajr/osservice/config"
@@ -19,6 +20,8 @@ type Ret struct {
 func GetOS(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
+
+	var waitGroup sync.WaitGroup
 
 	chanret := make(chan Ret)
 
@@ -37,29 +40,22 @@ func GetOS(w http.ResponseWriter, r *http.Request) {
 	// dbnat, errnat := config.Konnekt_nat()
 	// dbrec, errrec := config.Konnekt_rec()
 
+	waitGroup.Add(1)
+
 	if errara == nil {
 		_modelsara := models.ModelGetData{DB:dbara}
 		go func() {
+			defer waitGroup.Done()
 			var r Ret
 			r.IsiData, r.err = _modelsara.GetOS(doc, os)
 			chanret <- r
 		}()
 	}
 
+	// fmt.Println( <-chanret )
 	IsiData, err := <-chanret
 
-	// fmt.Println( <-chanret )
-		fmt.Println(err)
-
-	// if err {
-	// 	fmt.Println("ERR")
-	// 	fmt.Println(IsiData)
-	// } else {
-	// 	fmt.Println("ELSE ERR")
-	// 	fmt.Println( <-chanret )
-
-	// }
-
+	fmt.Println(err)
 
 	var Response _struct.ResponseData
 	Response.Status = http.StatusOK
