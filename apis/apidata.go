@@ -1,14 +1,7 @@
 package apis
 
 import (
-	"encoding/json"
-	"fmt"
-	"net/http"
-	"sync"
-
-	"github.com/gorilla/mux"
-	"github.com/wborbajr/osservice/config"
-	"github.com/wborbajr/osservice/models"
+	"github.com/gofiber/fiber"
 	_struct "github.com/wborbajr/osservice/struct"
 )
 
@@ -17,55 +10,51 @@ import (
 // https://stackoverflow.com/questions/27795036/create-chan-for-func-with-two-return-args#27795117
 //
 
-type Ret struct {
+type tempStruct  struct {
 	IsiData []_struct.StructData
 	err error
 }
 
-func GetOS(w http.ResponseWriter, r *http.Request) {
+func GetOS(c *fiber.Ctx){
 
-	w.Header().Set("Content-Type", "application/json")
+}
 
-	var waitGroup sync.WaitGroup
+// func GetOS(c *fiber.Ctx) {
 
-	chanret := make(chan Ret)
+// 	// w.Header().Set("Content-Type", "application/json")
 
-	params := mux.Vars(r)
+// 	var waitGroup sync.WaitGroup
 
-	if params["doc"] != "" && params["os"] != "" {
-		fmt.Println(params["doc"], params["os"])
-	}
+// 	chanret := make(chan tempStruct)
 
-	doc := params["doc"]
-	os := params["os"]
+// 	params := mux.Vars(r)
 
-	dbara, errara := config.Konnekt_ara()
-	// dbcwb, errcwb := config.Konnekt_cwb()
-	// dblon, errlon := config.Konnekt_lon()
-	// dbnat, errnat := config.Konnekt_nat()
-	// dbrec, errrec := config.Konnekt_rec()
+// 	if params["doc"] != "" && params["os"] != "" {
+// 		fmt.Println(params["doc"], params["os"])
+// 	}
 
-	waitGroup.Add(1)
+// 	doc := c.Params["doc"]
+// 	os := c.Params["os"]
 
-	if errara == nil {
-		_modelsara := models.ModelGetData{DB:dbara}
-		go func() {
-			defer waitGroup.Done()
-			tmpdata, temperr := _modelsara.GetOS(doc, os)
-			chanret <- Ret{tmpdata, temperr}
-			close(chanret)
-		}()
-	}
+// 	waitGroup.Add(1)
 
-	ara := <-chanret
+// 	_modelsara := models.ModelGetData{DB:dbara}
+// 	go func() {
+// 		defer waitGroup.Done()
+// 		tmpdata, temperr := _modelsara.GetOS(doc, os)
+// 		chanret <- tempStruct{tmpdata, temperr}
+// 		close(chanret)
+// 	}()
 
-	if ara.err == nil {
-		var Response _struct.ResponseData
-		Response.Status = http.StatusOK
-		Response.Message = "Sukses"
-		Response.Data = ara.IsiData
-		restponWithJson(w, http.StatusOK, Response)
-	}
+// 	ara := <-chanret
+
+// 	if ara.err == nil {
+// 		var Response _struct.ResponseData
+// 		Response.Status = http.StatusOK
+// 		Response.Message = "Sukses"
+// 		Response.Data = ara.IsiData
+// 		restponWithJson(w, http.StatusOK, Response)
+// 	}
 
 
 	// var Response _struct.ResponseData
@@ -114,11 +103,11 @@ func GetOS(w http.ResponseWriter, r *http.Request) {
 	// 	}
 	// }
 
-}
+// }
 
-func restponWithJson(w http.ResponseWriter, code int, payload interface{}) {
-	response, _ := json.Marshal(payload)
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(code)
-	w.Write(response)
-}
+// func restponWithJson(w http.ResponseWriter, code int, payload interface{}) {
+// 	response, _ := json.Marshal(payload)
+// 	w.Header().Set("Content-Type", "application/json")
+// 	w.WriteHeader(code)
+// 	w.Write(response)
+// }
