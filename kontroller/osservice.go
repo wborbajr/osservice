@@ -16,6 +16,14 @@ func GetAllOS(c *fiber.Ctx) error {
 	log.Println(paramDoc)
 	log.Println(paramOs)
 
+	err := apidata.GetOS(paramDoc, paramOs)
+
+	if err != nil {
+		log.Println(err.Error())
+	}
+
+
+
 	return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 		"success": false,
 		"message": "OS not found",

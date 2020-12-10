@@ -1,7 +1,6 @@
-package apis
+package apidata
 
 import (
-	"github.com/gofiber/fiber"
 	_struct "github.com/wborbajr/osservice/struct"
 )
 
@@ -10,13 +9,15 @@ import (
 // https://stackoverflow.com/questions/27795036/create-chan-for-func-with-two-return-args#27795117
 //
 
-type tempStruct  struct {
-	IsiData []_struct.StructData
-	err error
-}
+// type tempStruct  struct {
+// 	IsiData []_struct.StructData
+// 	err error
+// }
 
-func GetOS(c *fiber.Ctx){
+// GetOS
+func GetOS(doc string, os string) error {
 
+	return
 }
 
 // func GetOS(c *fiber.Ctx) {
