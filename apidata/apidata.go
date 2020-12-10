@@ -1,9 +1,5 @@
 package apidata
 
-import (
-	_struct "github.com/wborbajr/osservice/struct"
-)
-
 //
 // https://play.golang.org/p/mWw59cjYPh7
 // https://stackoverflow.com/questions/27795036/create-chan-for-func-with-two-return-args#27795117
@@ -14,10 +10,10 @@ import (
 // 	err error
 // }
 
-// GetOS
+// GetOS search for OS status
 func GetOS(doc string, os string) error {
 
-	return
+	return nil
 }
 
 // func GetOS(c *fiber.Ctx) {

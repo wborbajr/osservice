@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/wborbajr/osservice/apidata"
 )
 
 // GetAllOS - retrieve customer order service
@@ -21,8 +22,6 @@ func GetAllOS(c *fiber.Ctx) error {
 	if err != nil {
 		log.Println(err.Error())
 	}
-
-
 
 	return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 		"success": false,
