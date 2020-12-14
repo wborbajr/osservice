@@ -12,7 +12,7 @@ import (
 //
 
 // GetOS search for OS status
-func GetOS(doc string, os string) error {
+func GetOS(doc string, os string) (error) {
 
 	log.Println("GetOS")
 

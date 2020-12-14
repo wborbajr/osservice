@@ -8,11 +8,11 @@ type ModelGetData struct {
 	DB *sql.DB
 }
 
-// type TbOS struct {
-// 	IdOs       int
-// 	IdCliente  int
-// 	IdStatus int
-// }
+type ModelData struct {
+	IdOs       int
+	IdCliente  int
+	IdStatus int
+}
 
 // func (model ModelGetData) GetOS(doc string, os string) (getStruct []_struct.StructData, err error) {
 
