@@ -15,7 +15,7 @@ var dblon string
 var dbnat string
 var dbrec string
 
-var db *sql.DB
+var DB *sql.DB
 var err error
 
 func init(){
@@ -34,56 +34,79 @@ func init(){
 }
 
 // KonnektAra connect to Aracaju database
-func KonnektAra() (db *sql.DB, err error) {
-	db, err = sql.Open("firebirdsql", dbara)
+func KonnektAra() (error) {
+	DB, err = sql.Open("firebirdsql", dbara)
 
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return db, nil
+	if err = DB.Ping(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // KonnektCwb - connect to Curitiba database
-func KonnektCwb() (db *sql.DB, err error) {
-	db, err = sql.Open("firebirdsql", dbcwb)
+func KonnektCwb() (error) {
+	DB, err = sql.Open("firebirdsql", dbcwb)
 
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return db, nil
+	if err = DB.Ping(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // KonnektLon Connect to Londrina database
-func KonnektLon() (db *sql.DB, err error) {
-	db, err = sql.Open("firebirdsql", dblon)
+func KonnektLon() (error) {
+	DB, err = sql.Open("firebirdsql", dblon)
 
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return db, nil
+	if err = DB.Ping(); err != nil {
+		return err
+	}
+
+	return nil
+
 }
 
 // KonnektNat Connect to Natal database
-func KonnektNat() (db *sql.DB, err error) {
-	db, err = sql.Open("firebirdsql", dbnat)
+func KonnektNat() (error) {
+	DB, err = sql.Open("firebirdsql", dbnat)
 
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return db, nil
+	if err = DB.Ping(); err != nil {
+		return err
+	}
+
+	return nil
+
 }
 
 // KonnektRec Connect to Recife database
-func KonnektRec() (db *sql.DB, err error) {
-	db, err = sql.Open("firebirdsql", dbrec)
+func KonnektRec() (error) {
+	DB, err = sql.Open("firebirdsql", dbrec)
 
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return db, nil
+	if err = DB.Ping(); err != nil {
+		return err
+	}
+
+	return nil
+
 }
