@@ -140,6 +140,7 @@ services:
       dockerfile: dockerfile/Dockerfile
     volumes:
       - $PWD/.:/osservice:rw
+    working_dir: /osservice
     # depends_on:
     #   - database
     init: true
