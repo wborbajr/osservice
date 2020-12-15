@@ -1,0 +1,20 @@
+name: Check
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  check:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Start infrastructure
+      run: make start
+
+    - name: Dispose infrastructure
+      run: make stop
