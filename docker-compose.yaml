@@ -2,23 +2,12 @@ version: "3.8"
 
 services:
 
-  firebird_ara:
-    image: jacobalberty/firebird
-    container_name: firebird_ara
-    hostname: firebird
-    environment:
-      FIREBIRD_DATABASE: "CLIPP_ARA.FDB"
-      FIREBIRD_USER: "SYSDBA"
-      ISC_PASSWORD: "masterkey"
-      # - FIREBIRD_USER:SYSDBA
-      # - FIREBIRD_PASSWORD:masterkey
-    ports:
-       - 3051:3050
-    restart: always
+  cache:
+    image: redis:alpine
+    container_name: cache
+    hostname: cache
     volumes:
-      - $PWD/infra/fdb:/firebird/data/
-      # - $PWD/fbconf/SYSDBA.password:/firebird/etc/
-      # - $PWD/fbconf/firebird.conf:/firebird/etc/
+      - $PWD/infra/redis/data:/var/lib/redis
     networks:
       - infra
     logging:
@@ -26,168 +15,11 @@ services:
       options:
         max-size: "10m"
         max-file: "5"
-
-  firebird_cwb:
-    image: jacobalberty/firebird
-    container_name: firebird_cwb
-    hostname: firebird
-    environment:
-      FIREBIRD_DATABASE: "CLIPP_CWB.FDB"
-      FIREBIRD_USER: "SYSDBA"
-      ISC_PASSWORD: "masterkey"
-      # - FIREBIRD_USER:SYSDBA
-      # - FIREBIRD_PASSWORD:masterkey
-    ports:
-       - 3052:3050
-    restart: always
-    volumes:
-      - $PWD/infra/fdb:/firebird/data/
-      # - $PWD/fbconf/SYSDBA.password:/firebird/etc/
-      # - $PWD/fbconf/firebird.conf:/firebird/etc/
-    networks:
-      - infra
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "5"
-
-  firebird_lon:
-    image: jacobalberty/firebird
-    container_name: firebird_lon
-    hostname: firebird
-    environment:
-      FIREBIRD_DATABASE: "CLIPP_LON.FDB"
-      FIREBIRD_USER: "SYSDBA"
-      ISC_PASSWORD: "masterkey"
-      # - FIREBIRD_USER:SYSDBA
-      # - FIREBIRD_PASSWORD:masterkey
-    ports:
-       - 3053:3050
-    restart: always
-    volumes:
-      - $PWD/infra/fdb:/firebird/data/
-      # - $PWD/fbconf/SYSDBA.password:/firebird/etc/
-      # - $PWD/fbconf/firebird.conf:/firebird/etc/
-    networks:
-      - infra
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "5"
-
-  firebird_nat:
-    image: jacobalberty/firebird
-    container_name: firebird_nat
-    hostname: firebird
-    environment:
-      FIREBIRD_DATABASE: "CLIPP_NAT.FDB"
-      FIREBIRD_USER: "SYSDBA"
-      ISC_PASSWORD: "masterkey"
-      # - FIREBIRD_USER:SYSDBA
-      # - FIREBIRD_PASSWORD:masterkey
-    ports:
-       - 3054:3050
-    restart: always
-    volumes:
-      - $PWD/infra/fdb:/firebird/data/
-      # - $PWD/fbconf/SYSDBA.password:/firebird/etc/
-      # - $PWD/fbconf/firebird.conf:/firebird/etc/
-    networks:
-      - infra
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "5"
-
-  firebird_rec:
-    image: jacobalberty/firebird
-    container_name: firebird_rec
-    hostname: firebird
-    environment:
-      FIREBIRD_DATABASE: "CLIPP_REC.FDB"
-      FIREBIRD_USER: "SYSDBA"
-      ISC_PASSWORD: "masterkey"
-      # - FIREBIRD_USER:SYSDBA
-      # - FIREBIRD_PASSWORD:masterkey
-    ports:
-       - 3055:3050
-    restart: always
-    volumes:
-      - $PWD/infra/fdb:/firebird/data/
-      # - $PWD/fbconf/SYSDBA.password:/firebird/etc/
-      # - $PWD/fbconf/firebird.conf:/firebird/etc/
-    networks:
-      - infra
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "5"
-
-
-  mongodb:
-    image: mongo:latest
-    container_name: mongodb
-    hostname: mongodb
-    ports:
-      - 27017:27017
-    env_file:
-      - .env
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
-    volumes:
-      # - $PWD/infra/mongodb/db:/data/db:rw
-      # - $PWD/infra/mongodb/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
-
-      - $PWD/infra/mongodb/mongod.conf:/etc/mongod.conf
-      - $PWD/infra/mongodb/initdb.d/:/docker-entrypoint-initdb.d/
-      - $PWD/infra/mongodb/data/db/:/data/db/:rw
-      - $PWD/infra/mongodb/data/log/:/var/log/mongodb/:rw
-    restart: always
-    networks:
-      - infra
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "5"
-
-
-  mongo-express:
-    image: mongo-express
-    container_name: mongo-express
-    ports:
-      - 8081:8081
-    # volumes:
-    #   - $PWD/infra/mongo-express/docker-entrypoint.sh:/docker-entrypoint.sh
-    env_file:
-      - .env
-    environment:
-      ME_CONFIG_MONGODB_SERVER: mongodb
-      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-      ME_CONFIG_BASICAUTH_USERNAME: ${ME_CONFIG_BASICAUTH_USERNAME}
-      ME_CONFIG_BASICAUTH_PASSWORD: ${ME_CONFIG_BASICAUTH_PASSWORD}
-    depends_on:
-      - mongodb
-    restart: always
-    networks:
-      - infra
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "5"
-
 
   osservice:
     stdin_open: true
     tty: true
+    # image: wborbajr/osservice:latest
     image: wborbajr/osservice:latest
     container_name: osservice
     hostname: osservice
@@ -198,9 +30,11 @@ services:
       - $PWD/.:/osservice:rw
     working_dir: /osservice
     depends_on:
-      - mongodb
+      - cache
     init: true
     restart: always
+    # env_file:
+    #   - docker.env
     environment:
       - TZ=America/Sao_Paulo
       - LC_CTYPE=en_US.UTF-8

@@ -4,4 +4,4 @@ CONFIG.rst
 vendor/
 .env
 infra/mongodb/data/
-
+infra/redis/data

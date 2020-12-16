@@ -24,6 +24,14 @@ default: help
 
 production: stop dang rebuild deploy
 
+produp:
+	@echo "\nStarting production mode...\n"
+	docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+
+proddown:
+	@echo "\nstoping production mode...\n"
+	docker-compose -f docker-compose.yml -f docker-compose.prod.yml down --remove-orphans
+
 build:
 	@echo "\nStarting build...\n"
 	docker-compose -f ${DOCKERFILE} build

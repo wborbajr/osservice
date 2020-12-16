@@ -1,0 +1,5 @@
+services:
+
+  cache:
+    command: redis-server --requirepass sOmE_sEcUrE_pAsS
+
