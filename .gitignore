@@ -3,3 +3,5 @@ CONFIG.rst
 .idea/
 vendor/
 .env
+infra/mongodb/data/
+

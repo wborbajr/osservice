@@ -127,6 +127,7 @@ services:
         max-size: "10m"
         max-file: "5"
 
+
   mongodb:
     image: mongo:latest
     container_name: mongodb
@@ -140,8 +141,8 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
       MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
     volumes:
-      - $PWD/infra/mongodb/db:/data/db:rw
-      - $PWD/infra/mongodb/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+      # - $PWD/infra/mongodb/db:/data/db:rw
+      # - $PWD/infra/mongodb/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
 
       - $PWD/infra/mongodb/mongod.conf:/etc/mongod.conf
       - $PWD/infra/mongodb/initdb.d/:/docker-entrypoint-initdb.d/
@@ -162,8 +163,8 @@ services:
     container_name: mongo-express
     ports:
       - 8081:8081
-    volumes:
-      - ./.docker/mongo-express/docker-entrypoint.sh:/docker-entrypoint.sh
+    # volumes:
+    #   - $PWD/infra/mongo-express/docker-entrypoint.sh:/docker-entrypoint.sh
     env_file:
       - .env
     environment:
@@ -173,7 +174,7 @@ services:
       ME_CONFIG_BASICAUTH_USERNAME: ${ME_CONFIG_BASICAUTH_USERNAME}
       ME_CONFIG_BASICAUTH_PASSWORD: ${ME_CONFIG_BASICAUTH_PASSWORD}
     depends_on:
-        - mongodb
+      - mongodb
     restart: always
     networks:
       - infra
@@ -183,20 +184,21 @@ services:
         max-size: "10m"
         max-file: "5"
 
+
   osservice:
     stdin_open: true
     tty: true
-    image: ${DOCKER_USER}/${PROJECT_NAME}:${DOCKER_TAG}
-    container_name: ${CONTAINER}
-    hostname: ${PROJECT_NAME}
+    image: wborbajr/osservice:latest
+    container_name: osservice
+    hostname: osservice
     build:
       context: .
       dockerfile: dockerfile/Dockerfile
     volumes:
       - $PWD/.:/osservice:rw
     working_dir: /osservice
-    # depends_on:
-    #   - database
+    depends_on:
+      - mongodb
     init: true
     restart: always
     environment:

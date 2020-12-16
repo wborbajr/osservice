@@ -11,7 +11,25 @@
 # https://itnext.io/docker-makefile-x-ops-sharing-infra-as-code-parts-ea6fa0d22946
 #
 
-include docker.env
+# include docker.env
+
+ifeq ($(user),)
+	# USER retrieved from env, UID from shell.
+	HOST_USER ?= $(strip $(if $(USER),$(USER),nodummy))
+	HOST_UID ?= $(strip $(if $(shell id -u),$(shell id -u),4000))
+else
+	# allow override by adding user= and/ or uid=  (lowercase!).
+	# uid= defaults to 0 if user= set (i.e. root).
+	HOST_USER = $(user)
+	HOST_UID = $(strip $(if $(uid),$(uid),0))
+endif
+
+PROJECT_NAME = osservice
+DOCKER_USER = wborbajr
+DOCKER_TAG = latest
+# DOCKER_TAG := $(shell date +%Y%m%d)
+DOCKERFILE = docker-compose.yaml
+CONTAINER = ${PROJECT_NAME}_$(HOST_UID)
 
 export PROJECT_NAME
 export DOCKER_TAG
