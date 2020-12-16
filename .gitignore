@@ -5,3 +5,4 @@ vendor/
 .env
 infra/mongodb/data/
 infra/redis/data
+__debug_bin
