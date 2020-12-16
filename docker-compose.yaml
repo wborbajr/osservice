@@ -127,8 +127,6 @@ services:
         max-size: "10m"
         max-file: "5"
 
-
-
   osservice:
     stdin_open: true
     tty: true
