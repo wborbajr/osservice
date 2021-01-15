@@ -24,6 +24,16 @@ default: help
 
 production: stop dang rebuild deploy
 
+gobuild:
+	rm -f go.*
+	rm -f vendor/
+	go mod init github.com/wborbajr/osservice
+	go mod tidy
+
+	@echo "########## GO Building starting ... "
+	CGO_ENABLED=0 GOOS=linux go build --trimpath -ldflags="-s -w" -o osservice main.go
+	@echo "GO Build done..."
+
 produp:
 	@echo "\nStarting production mode...\n"
 	docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d

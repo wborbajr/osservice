@@ -9,7 +9,9 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/limiter"
 	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/joho/godotenv"
+	"github.com/pkg/errors"
 	"github.com/wborbajr/osservice/router"
 )
 
@@ -28,6 +30,12 @@ func init() {
 // SetupApp - Create GoFiber app
 func SetupApp() {
 	app := fiber.New(fiber.Config{
+		ErrorHandler: func(ctx *fiber.Ctx, err error) error {
+			if _, ok := err.(*fiber.Error); ok {
+				return errors.New("Fiber Error")
+			}
+			return errors.New("Managed Error")
+		},
 		Concurrency:  	256 * 1024,
 		WriteTimeout: 	10 * time.Second,
 		ReadTimeout: 	10 * time.Second,
@@ -41,6 +49,8 @@ func SetupApp() {
 		Max:      14,
 	}))
 
+	app.Use(recover.New())
+
 	app.Use(logger.New(logger.Config{
 		Format:     "${pid} ${status} - ${method} ${path}\n",
 		TimeFormat: "02-Jan-2000",
@@ -53,6 +63,8 @@ func SetupApp() {
 		AllowHeaders: "Origin, Content-Type, Accept",
 		AllowMethods: "GET, OPTIONS, PUT, DELETE, POST",
 	}))
+
+
 
 	log.Printf("Loading routes...")
 	// setup routes
