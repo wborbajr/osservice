@@ -13,6 +13,14 @@
 
 include docker.env
 
+# Makefile
+.EXPORT_ALL_VARIABLES:
+
+#GO111MODULE=on
+#GOPROXY=https://proxy.golang.org
+#GONOSUMDB=off
+#GOPRIVATE=*. internal.mycompany.com
+
 export PROJECT_NAME
 export DOCKER_TAG
 export DOCKER_USER
