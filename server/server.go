@@ -64,8 +64,6 @@ func SetupApp() {
 		AllowMethods: "GET, OPTIONS, PUT, DELETE, POST",
 	}))
 
-
-
 	log.Printf("Loading routes...")
 	// setup routes
 	setupRoutes(app)
