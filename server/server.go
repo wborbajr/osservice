@@ -68,11 +68,25 @@ func SetupApp() {
 	// setup routes
 	setupRoutes(app)
 
+	// fmt.Println(getOutboundIP())
+
 	log.Printf( "Server up and running: http://127.0.0.1:%s", port)
 	// log.Fatal(app.Server().ListenAndServeTLS(":"+sslport, "./certs/server.crt", "./certs/server.key"))
 	log.Fatal(app.Listen(":"+port))
 
 }
+
+// func getOutboundIP() net.IP {
+// 	conn, err := net.Dial("udp", "8.8.8.8:80")
+// 	if err != nil {
+// 			log.Fatal(err)
+// 	}
+// 	defer conn.Close()
+
+// 	localAddr := conn.LocalAddr().(*net.UDPAddr)
+
+// 	return localAddr.IP
+// }
 
 func setupRoutes(app *fiber.App) {
 	// give response when at /
