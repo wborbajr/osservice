@@ -6,6 +6,13 @@ LABEL maintainer="Waldir Borba Junior <wborbajr@gmail.com>" \
     version="V0.0.1.0" \
     description="OS Service Application | osservice:latest"
 
+# Install git + SSL ca certificates.
+# Git is required for fetching the dependencies.
+# Ca-certificates is required to call HTTPS endpoints.
+RUN apk update && apk add --no-cache git ca-certificates gcc g++ libc-dev && update-ca-certificates
+# Create appuser
+RUN adduser -D -g '' appuser
+
 WORKDIR /go/app
 
 COPY go.mod go.sum ./
@@ -21,54 +28,45 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=5 go build \
 
 # 2nd - Distro Setup
 #
-FROM alpine as linuxsetup
-ENV LANG=en_US.UTF-8 \
-    LANGUAGE=en_US.UTF-8
-ENV TZ America/Sao_Paulo
-RUN apk add --update --no-cache \
-    tzdata \
-    htop \
-    apk-cron \
-    bash \
-    ca-certificates \
-    && cp /usr/share/zoneinfo/${TZ} /etc/localtime \
-    && echo "${TZ}" > /etc/timezone
+# FROM alpine as linuxsetup
+# ENV LANG=en_US.UTF-8 \
+#     LANGUAGE=en_US.UTF-8
+# ENV TZ America/Sao_Paulo
+# RUN apk add --update --no-cache \
+#     tzdata \
+#     htop \
+#     apk-cron \
+#     bash \
+#     ca-certificates \
+#     && cp /usr/share/zoneinfo/${TZ} /etc/localtime \
+#     && echo "${TZ}" > /etc/timezone
 
-RUN update-ca-certificates
+# RUN update-ca-certificates
 
-# Create the user and group files that will be used in the running
-# container to run the process as an unprivileged user.
-RUN mkdir /user && \
-    echo 'nobody:x:65534:65534:nobody:/:' > /user/passwd && \
-    echo 'nobody:x:65534:' > /user/group
+# # Create the user and group files that will be used in the running
+# # container to run the process as an unprivileged user.
+# RUN mkdir /user && \
+#     echo 'nobody:x:65534:65534:nobody:/:' > /user/passwd && \
+#     echo 'nobody:x:65534:' > /user/group
 
 # 3rd - Final
 #
-FROM alpine as final
+FROM scratch
 
 WORKDIR /osservice
 
-# Import the user and group files from the first stage.
-COPY --from=linuxsetup /user/group /user/passwd /etc/
-#
-# Import the Certificate-Authority certificates for enabling HTTPS.
-COPY --from=linuxsetup /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-COPY --from=linuxsetup /bin/bash /bin/bash
-# COPY --from=linuxsetup /var/spool/cron /var/spool/cron
-# COPY --from=linuxsetup /usr/bin/crontab /usr/bin/crontab
-COPY --from=linuxsetup /etc/localtime /etc/localtime
-COPY --from=linuxsetup /etc/timezone /etc/timezone
-COPY --from=linuxsetup /usr/bin/htop /usr/bin/htop
+# Import from builder.
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+COPY --from=builder /etc/passwd /etc/passwd
 #
 COPY --from=builder go/app/osservice .
-COPY --from=builder go/app/certs ./certs
 COPY --from=builder go/app/.env .
 #
 
-EXPOSE 3443
+EXPOSE 3001
 
 # Perform any further action as an unprivileged user.
-USER nobody:nobody
+USER appuser
 
 # Run the service on container startup.
 ENTRYPOINT ["./osservice"]
