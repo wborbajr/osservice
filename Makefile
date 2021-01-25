@@ -26,88 +26,142 @@ export DOCKER_TAG
 export DOCKER_USER
 export CONTAINER
 
+GOCMD=go
+GOBUILD=$(GOCMD) build
+GOCLEAN=$(GOCMD) clean -cache -modcache
+GOTEST=$(GOCMD) test
+GOGET=$(GOCMD) get
+GORUN=$(GOCMD) run
+GOMOD=$(GOCMD) mod
+#
+DOKCMD=docker
+DOKCOMPCMD=docker-compose
+#
+BINARY_NAME=osservice
+
 .PHONY: default
 
 default: help
 
-production: stop dang rebuild deploy
+# production: stop dang rebuild deploy
+
+#
+# GOLang CMD
+# ------------------------------------------------------------------------------
 
 gobuild:
 	rm -f go.*
 	rm -f vendor/
-	go mod init github.com/wborbajr/osservice
-	go mod tidy
+	# $(GOCLEAN)
+	$(GOMOD) init github.com/wborbajr/osservice
+	$(GOMOD) tidy
 
 	@echo "########## GO Building starting ... "
-	CGO_ENABLED=0 GOOS=linux go build --trimpath -ldflags="-s -w" -o osservice main.go
+	CGO_ENABLED=0 GOOS=linux $(GOBUILD) --trimpath -ldflags="-s -w" -o $(BINARY_NAME) main.go
 	@echo "GO Build done..."
+
+#
+# Production
+# ------------------------------------------------------------------------------
+
+prodbuild:
+	@echo "\nStarting build...\n"
+	$(DOKCOMPCMD) -f $(DOCKERFILE) -f $(DOCKERFILEPROD) build
+
+prodrebuild:
+	@echo "\nForcing Rebuild...\n"
+	$(DOKCOMPCMD) -f $(DOCKERFILE) -f $(DOCKERFILEPROD) build --no-cache --force-rm --pull
 
 produp:
 	@echo "\nStarting production mode...\n"
-	docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+	$(DOKCOMPCMD) -f $(DOCKERFILE) -f $(DOCKERFILEPROD) up -d
+
+prodstop:
+	@echo "\nstoping production mode...\n"
+	$(DOKCOMPCMD) -f $(DOCKERFILE) -f $(DOCKERFILEPROD) stop
 
 proddown:
 	@echo "\nstoping production mode...\n"
-	docker-compose -f docker-compose.yml -f docker-compose.prod.yml down --remove-orphans
+	$(DOKCOMPCMD) -f $(DOCKERFILE) -f $(DOCKERFILEPROD) down -v --remove-orphans --rmi all
 
-build:
+prodtop:
+	$(DOKCOMPCMD) -f $(DOCKERFILE) -f $(DOCKERFILEPROD) top
+
+prodps:
+	$(DOKCOMPCMD) -f $(DOCKERFILE) -f $(DOCKERFILEPROD) ps
+
+prodlogs:
+	$(DOKCOMPCMD) -f $(DOCKERFILE) -f $(DOCKERFILEPROD) logs
+
+prodevents:
+	$(DOKCOMPCMD) -f $(DOCKERFILE) -f $(DOCKERFILEPROD) events
+
+prodpause:
+	$(DOKCOMPCMD) -f $(DOCKERFILE) -f $(DOCKERFILEPROD) pause
+
+produnpause:
+	$(DOKCOMPCMD) -f $(DOCKERFILE) -f $(DOCKERFILEPROD) unpause
+
+#
+# Development
+# ------------------------------------------------------------------------------
+
+devbuild:
 	@echo "\nStarting build...\n"
-	docker-compose -f ${DOCKERFILE} build
+	$(DOKCOMPCMD) build
 
-rebuild:
+devrebuild:
 	@echo "\nForcing Rebuild...\n"
-	docker-compose -f ${DOCKERFILE} build --no-cache --force-rm --pull
+	$(DOKCOMPCMD) build --no-cache --force-rm --pull
 
-start:
+devup:
 	@echo "\nStarting container...\n"
-	docker-compose -f ${DOCKERFILE} up -d
+	$(DOKCOMPCMD) up -d
 
-stop:
+devstop:
 	@echo "\nStoping container...\n"
-	docker-compose -f ${DOCKERFILE} down --remove-orphans
+	$(DOKCOMPCMD) stop
 
-stopall:
+devdown:
 	@echo "\nStoping container...\n"
-	docker-compose -f ${DOCKERFILE} down --remove-orphans --rmi all
+	$(DOKCOMPCMD) down -v --remove-orphans --rmi all
+
+devtop:
+	$(DOKCOMPCMD) top
+
+devps:
+	$(DOKCOMPCMD) ps
+
+devlogs:
+	$(DOKCOMPCMD) logs
+
+devevents:
+	$(DOKCOMPCMD) events
+
+devpause:
+	$(DOKCOMPCMD) pause
+
+devunpause:
+	$(DOKCOMPCMD) unpause
+
+#
+# Docker CMD
+# ------------------------------------------------------------------------------
 
 exec:
 	@echo "\nEntering container...\n"
-	docker exec -ti ${CONTAINER} /bin/bash
+	$(DOKCMD) exec -ti ${CONTAINER} /bin/bash
 
 deploy:
 	@echo "\nStarting delpoy...\n"
-	docker push ${DOCKER_USER}/${PROJECT_NAME}:${DOCKER_TAG}
+	$(DOKCMD) push ${DOCKER_USER}/${PROJECT_NAME}:${DOCKER_TAG}
 
 dang:
 	@echo "\nStarting dangling removal\n"
-	docker rmi $$(docker images -q -f dangling=true)
-
-develop:
-	docker-compose up --force-recreate --build && docker-compose down --remove-orphans
-
-restart:
-	docker-compose -f ${DOCKERFILE} restart
-
-pause:
-	docker-compose -f ${DOCKERFILE} pause
-
-unpause:
-	docker-compose -f ${DOCKERFILE} unpause
-
-top:
-	docker-compose -f ${DOCKERFILE} top
-
-ps:
-	docker-compose -f ${DOCKERFILE} ps
-
-logs:
-	docker-compose -f ${DOCKERFILE} logs
-
-events:
-	docker-compose -f ${DOCKERFILE} events
+	$(DOKCMD) rmi $$(docker images -q -f dangling=true)
 
 prune:
-	docker system prune -a -f --volumes
+	$(DOKCMD) system prune -a -f --volumes
 
 help:
 	@echo ''

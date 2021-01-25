@@ -109,7 +109,6 @@ services:
         max-size: "10m"
         max-file: "5"
 
-
   mongodb:
     image: mongo:latest
     container_name: mongodb
