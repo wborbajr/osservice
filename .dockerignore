@@ -11,3 +11,16 @@ passwords.txt
 #Ignoring all the markdown and class files
 *.md
 **/*.class
+
+# Project
+infra/
+dockerfile/
+.github/
+.vscode/
+.env-SAMPLE
+CONFIG.rst
+docker*
+LICENSE
+lint.log
+Makefile*
+README.md

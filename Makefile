@@ -25,7 +25,15 @@ export PROJECT_NAME
 export DOCKER_TAG
 export DOCKER_USER
 export CONTAINER
+export GOBIN ?= $(shell pwd)/bin
 
+GOLINT = $(GOBIN)/golint
+
+GO_FILES := $(shell \
+	find . '(' -path '*/.*' -o -path './vendor' ')' -prune \
+	-o -name '*.go' -print | cut -b3-)
+
+#
 GOCMD=go
 GOBUILD=$(GOCMD) build
 GOCLEAN=$(GOCMD) clean -cache -modcache
@@ -59,6 +67,18 @@ gobuild:
 	@echo "########## GO Building starting ... "
 	CGO_ENABLED=0 GOOS=linux $(GOBUILD) --trimpath -ldflags="-s -w" -o $(BINARY_NAME) main.go
 	@echo "GO Build done..."
+
+lint: $(GOLINT)
+	@rm -rf lint.log
+	@echo "Checking formatting..."
+	@gofmt -d -s $(GO_FILES) 2>&1 | tee lint.log
+	@echo "Checking vet..."
+	@go vet ./... 2>&1 | tee -a lint.log
+	@echo "Checking lint..."
+	@$(GOLINT) ./... | tee -a lint.log
+	@echo "Checking for unresolved FIXMEs..."
+	@git grep -i fixme | grep -v -e vendor -e Makefile -e .md | tee -a lint.log
+	@[ ! -s lint.log ]
 
 #
 # Production

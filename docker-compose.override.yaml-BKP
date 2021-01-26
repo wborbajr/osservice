@@ -138,7 +138,6 @@ services:
         max-size: "10m"
         max-file: "5"
 
-
   mongo-express:
     image: mongo-express
     container_name: mongo-express

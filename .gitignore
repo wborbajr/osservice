@@ -7,3 +7,4 @@ infra/mongodb/data/
 infra/redis/data
 __debug_bin
 osservice
+lint.log
