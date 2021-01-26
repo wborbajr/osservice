@@ -11,13 +11,13 @@ LABEL maintainer="Waldir Borba Junior <wborbajr@gmail.com>" \
 # Install git + SSL ca certificates.
 # Git is required for fetching the dependencies.
 # Ca-certificates is required to call HTTPS endpoints.
-RUN apk update && apk add --no-cache git ca-certificates gcc g++ libc-dev && update-ca-certificates
+RUN apk update && apk add --no-cache git ca-certificates bash gcc g++ libc-dev && update-ca-certificates
 # Create appuser
 RUN adduser -D -g '' appuser
 #
 WORKDIR /go/app
 #
-ENV APP_BUILD_NAME="app"
+ENV APP_BUILD_NAME="osservice"
 #
 COPY go.mod go.sum ./
 #
@@ -27,7 +27,7 @@ COPY . .
 #
 # CGO_ENABLED=0 GOARCH=arm GOARCH=amd64
 
-RUN CGO_ENABLED=1 GOOS=linux go build \
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
     -ldflags='-w -s -extldflags "-static"' \
     -a -installsuffix cgo \
     -v -o ${APP_BUILD_NAME} main.go
@@ -59,20 +59,21 @@ RUN chmod +x ${APP_BUILD_NAME}
 
 # 3rd - Final
 #
-FROM alpine as final
+FROM scratch as final
 
 WORKDIR /osservice/
 
 # Import from builder.
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder /etc/passwd /etc/passwd
+COPY --from=builder /bin/bash /bin/bash
 #
-COPY --from=builder /go/app/app .
+COPY --from=builder /go/app/osservice .
 COPY --from=builder /go/app/.env .
 #
 EXPOSE 3001
 # Perform any further action as an unprivileged user.
 USER appuser
 # Run the service on container startup.
-ENTRYPOINT ["./app"]
+ENTRYPOINT ["./osservice"]
 CMD ""
