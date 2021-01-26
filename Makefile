@@ -158,10 +158,13 @@ deploy:
 
 dang:
 	@echo "\nStarting dangling removal\n"
-	$(DOKCMD) rmi $$(docker images -q -f dangling=true)
+	$(DOKCMD) rmi $$($(DOKCMD) images -q -f dangling=true)
 
 prune:
 	$(DOKCMD) system prune -a -f --volumes
+
+remove:
+	$(DOKCMD) rm $$($(DOKCMD) ps -a -q) -f
 
 help:
 	@echo ''

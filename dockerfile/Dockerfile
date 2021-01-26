@@ -69,7 +69,7 @@ EXPOSE 3001
 USER appuser
 
 # Run the service on container startup.
-ENTRYPOINT ["./osservice"]
+ENTRYPOINT ["./osservice/osservice"]
 
 # CMD ["./osservice"]
 
