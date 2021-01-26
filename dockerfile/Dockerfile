@@ -1,6 +1,8 @@
 # 1st - Dependencies
 #
-FROM golang:alpine as builder
+# FROM golang:alpine as builder
+ARG GO_VERSION=1.15.7-alpine3.13
+FROM golang:${GO_VERSION} as builder
 
 LABEL maintainer="Waldir Borba Junior <wborbajr@gmail.com>" \
     version="V0.0.1.0" \
@@ -13,7 +15,9 @@ RUN apk update && apk add --no-cache git ca-certificates gcc g++ libc-dev && upd
 # Create appuser
 RUN adduser -D -g '' appuser
 #
-WORKDIR /osservice/
+WORKDIR /go/app
+#
+ENV APP_BUILD_NAME="app"
 #
 COPY go.mod go.sum ./
 #
@@ -21,12 +25,14 @@ RUN go mod download
 #
 COPY . .
 #
-# GOARCH=arm GOARM=5
+# CGO_ENABLED=0 GOARCH=arm GOARCH=amd64
 
-RUN CGO_ENABLED=0 GOOS=linux go build \
+RUN CGO_ENABLED=1 GOOS=linux go build \
     -ldflags='-w -s -extldflags "-static"' \
     -a -installsuffix cgo \
-    -v -o app main.go
+    -v -o ${APP_BUILD_NAME} main.go
+#
+RUN chmod +x ${APP_BUILD_NAME}
 
 # 2nd - Distro Setup
 #
@@ -53,7 +59,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build \
 
 # 3rd - Final
 #
-FROM scratch
+FROM alpine as final
 
 WORKDIR /osservice/
 
@@ -61,14 +67,12 @@ WORKDIR /osservice/
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder /etc/passwd /etc/passwd
 #
-COPY --from=builder /osservice/ /osservice/
-COPY --from=builder /osservice/.env /osservice/
+COPY --from=builder /go/app/app .
+COPY --from=builder /go/app/.env .
 #
 EXPOSE 3001
 # Perform any further action as an unprivileged user.
 USER appuser
 # Run the service on container startup.
 ENTRYPOINT ["./app"]
-# CMD ["./app"]
-
-
+CMD ""

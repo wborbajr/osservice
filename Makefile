@@ -92,7 +92,7 @@ prodrebuild:
 	@echo "\nForcing Rebuild...\n"
 	$(DOKCOMPCMD) -f $(DOCKERFILE) -f $(DOCKERFILEPROD) build --no-cache --force-rm --pull
 
-produp:
+prodstart:
 	@echo "\nStarting production mode...\n"
 	$(DOKCOMPCMD) -f $(DOCKERFILE) -f $(DOCKERFILEPROD) up -d
 
@@ -134,7 +134,7 @@ devrebuild:
 	@echo "\nForcing Rebuild...\n"
 	$(DOKCOMPCMD) build --no-cache --force-rm --pull
 
-devup:
+devstart:
 	@echo "\nStarting container...\n"
 	$(DOKCOMPCMD) up -d
 

@@ -19,15 +19,14 @@ services:
   osservice:
     stdin_open: true
     tty: true
-    # image: wborbajr/osservice:latest
     image: wborbajr/osservice:latest
     container_name: osservice
     hostname: osservice
     build:
       context: .
       dockerfile: dockerfile/Dockerfile
-    volumes:
-      - $PWD/.:/osservice:rw
+    # volumes:
+    #   - $PWD/.:/osservice:rw
     working_dir: /osservice
     depends_on:
       - cache
