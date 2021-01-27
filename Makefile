@@ -128,41 +128,41 @@ produnpause:
 
 devbuild:
 	@echo "\nStarting build...\n"
-	$(DOKCOMPCMD) -f docker-compose.dev.yaml -f ./dockerfile.dev/docker-compose.override.yaml build
+	$(DOKCOMPCMD) -f $(DKRFILEDEV) -f $(DKRFILEDEVOVR) build
 
 devrebuild:
 	@echo "\nForcing Rebuild...\n"
-	$(DOKCOMPCMD) build --no-cache --force-rm --pull
+	$(DOKCOMPCMD) -f $(DKRFILEDEV) -f $(DKRFILEDEVOVR) build --no-cache --force-rm --pull
 
 devstart:
 	@echo "\nStarting container...\n"
-	$(DOKCOMPCMD) -f docker-compose.dev.yaml -f ./dockerfile.dev/docker-compose.override.yaml up -d
+	$(DOKCOMPCMD) -f $(DKRFILEDEV) -f $(DKRFILEDEVOVR) up -d
 
 devstop:
 	@echo "\nStoping container...\n"
-	$(DOKCOMPCMD) -f docker-compose.dev.yaml -f ./dockerfile.dev/docker-compose.override.yaml stop
+	$(DOKCOMPCMD) -f $(DKRFILEDEV) -f $(DKRFILEDEVOVR) stop
 
 devdown:
 	@echo "\nStoping container...\n"
-	$(DOKCOMPCMD) -f docker-compose.dev.yaml -f ./dockerfile.dev/docker-compose.override.yaml down -v --remove-orphans --rmi all
+	$(DOKCOMPCMD) -f $(DKRFILEDEV) -f $(DKRFILEDEVOVR) down -v --remove-orphans --rmi all
 
 devtop:
-	$(DOKCOMPCMD) -f docker-compose.dev.yaml -f ./dockerfile.dev/docker-compose.override.yaml top
+	$(DOKCOMPCMD) -f $(DKRFILEDEV) -f $(DKRFILEDEVOVR) top
 
 devps:
-	$(DOKCOMPCMD) -f docker-compose.dev.yaml -f ./dockerfile.dev/docker-compose.override.yaml ps
+	$(DOKCOMPCMD) -f $(DKRFILEDEV) -f $(DKRFILEDEVOVR) ps
 
 devlogs:
-	$(DOKCOMPCMD) -f docker-compose.dev.yaml -f ./dockerfile.dev/docker-compose.override.yaml logs
+	$(DOKCOMPCMD) -f $(DKRFILEDEV) -f $(DKRFILEDEVOVR) logs
 
 devevents:
-	$(DOKCOMPCMD) -f docker-compose.dev.yaml -f ./dockerfile.dev/docker-compose.override.yaml events
+	$(DOKCOMPCMD) -f $(DKRFILEDEV) -f $(DKRFILEDEVOVR) events
 
 devpause:
-	$(DOKCOMPCMD) -f docker-compose.dev.yaml -f ./dockerfile.dev/docker-compose.override.yaml pause
+	$(DOKCOMPCMD) -f $(DKRFILEDEV) -f $(DKRFILEDEVOVR) pause
 
 devunpause:
-	$(DOKCOMPCMD) -f docker-compose.dev.yaml -f ./dockerfile.dev/docker-compose.override.yaml unpause
+	$(DOKCOMPCMD) -f $(DKRFILEDEV) -f $(DKRFILEDEVOVR) unpause
 
 #
 # Docker CMD

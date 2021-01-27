@@ -32,7 +32,7 @@ RUN chmod +x ${APP_BUILD_NAME}
 
 # 3rd - Stage
 #
-FROM alpine AS prod
+FROM scratch AS prod
 
 ENV APP_BUILD_PATH="/osservice/app" \
     APP_BUILD_NAME="osservice"
