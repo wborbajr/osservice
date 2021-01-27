@@ -13,11 +13,12 @@ passwords.txt
 **/*.class
 
 # Project
-infra/
-dockerfile/
 .github/
 .vscode/
 .env-SAMPLE
+infra/
+SQL/
+dockerfile*/**
 CONFIG.rst
 docker*
 LICENSE

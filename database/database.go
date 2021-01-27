@@ -19,10 +19,10 @@ var DB *sql.DB
 var err error
 
 func init(){
-	err := godotenv.Load(".env")
 
+	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Error reading .env file")
+		log.Fatal("Error reading .env file: ", err)
 	}
 
 	dbara = os.Getenv("ARA")

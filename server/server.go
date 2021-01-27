@@ -19,9 +19,9 @@ var port string
 
 func init() {
 
-	err := godotenv.Load(".env")
+	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Fatal("Error reading .env file: ", err)
 	}
 
 	port = os.Getenv("APP_PORT")
