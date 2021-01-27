@@ -128,7 +128,7 @@ produnpause:
 
 devbuild:
 	@echo "\nStarting build...\n"
-	$(DOKCOMPCMD) build
+	$(DOKCOMPCMD) -f docker-compose.dev.yaml -f ./dockerfile.dev/docker-compose.override.yaml build
 
 devrebuild:
 	@echo "\nForcing Rebuild...\n"
@@ -136,33 +136,33 @@ devrebuild:
 
 devstart:
 	@echo "\nStarting container...\n"
-	$(DOKCOMPCMD) up -d
+	$(DOKCOMPCMD) -f docker-compose.dev.yaml -f ./dockerfile.dev/docker-compose.override.yaml up -d
 
 devstop:
 	@echo "\nStoping container...\n"
-	$(DOKCOMPCMD) stop
+	$(DOKCOMPCMD) -f docker-compose.dev.yaml -f ./dockerfile.dev/docker-compose.override.yaml stop
 
 devdown:
 	@echo "\nStoping container...\n"
-	$(DOKCOMPCMD) down -v --remove-orphans --rmi all
+	$(DOKCOMPCMD) -f docker-compose.dev.yaml -f ./dockerfile.dev/docker-compose.override.yaml down -v --remove-orphans --rmi all
 
 devtop:
-	$(DOKCOMPCMD) top
+	$(DOKCOMPCMD) -f docker-compose.dev.yaml -f ./dockerfile.dev/docker-compose.override.yaml top
 
 devps:
-	$(DOKCOMPCMD) ps
+	$(DOKCOMPCMD) -f docker-compose.dev.yaml -f ./dockerfile.dev/docker-compose.override.yaml ps
 
 devlogs:
-	$(DOKCOMPCMD) logs
+	$(DOKCOMPCMD) -f docker-compose.dev.yaml -f ./dockerfile.dev/docker-compose.override.yaml logs
 
 devevents:
-	$(DOKCOMPCMD) events
+	$(DOKCOMPCMD) -f docker-compose.dev.yaml -f ./dockerfile.dev/docker-compose.override.yaml events
 
 devpause:
-	$(DOKCOMPCMD) pause
+	$(DOKCOMPCMD) -f docker-compose.dev.yaml -f ./dockerfile.dev/docker-compose.override.yaml pause
 
 devunpause:
-	$(DOKCOMPCMD) unpause
+	$(DOKCOMPCMD) -f docker-compose.dev.yaml -f ./dockerfile.dev/docker-compose.override.yaml unpause
 
 #
 # Docker CMD

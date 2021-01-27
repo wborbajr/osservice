@@ -10,7 +10,6 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/limiter"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
-	"github.com/joho/godotenv"
 	"github.com/pkg/errors"
 	"github.com/wborbajr/osservice/router"
 )
@@ -19,10 +18,10 @@ var port string
 
 func init() {
 
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error reading .env file: ", err)
-	}
+	// err := godotenv.Load()
+	// if err != nil {
+	// 	log.Fatal("Error reading .env file: ", err)
+	// }
 
 	port = os.Getenv("APP_PORT")
 }

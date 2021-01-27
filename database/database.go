@@ -2,10 +2,8 @@ package database
 
 import (
 	"database/sql"
-	"log"
 	"os"
 
-	"github.com/joho/godotenv"
 	_ "github.com/nakagami/firebirdsql"
 )
 
@@ -20,10 +18,10 @@ var err error
 
 func init(){
 
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error reading .env file: ", err)
-	}
+	// err := godotenv.Load()
+	// if err != nil {
+	// 	log.Fatal("Error reading .env file: ", err)
+	// }
 
 	dbara = os.Getenv("ARA")
 	dbcwb = os.Getenv("CWB")
