@@ -86,41 +86,41 @@ lint: $(GOLINT)
 
 prodbuild:
 	@echo "\nStarting build...\n"
-	$(DOKCOMPCMD) -f $(DOCKERFILE) -f $(DOCKERFILEPROD) build
+	$(DOKCOMPCMD) -f $(DKRFILEPROD) -f $(DKRFILEPRODOVR) build
 
 prodrebuild:
 	@echo "\nForcing Rebuild...\n"
-	$(DOKCOMPCMD) -f $(DOCKERFILE) -f $(DOCKERFILEPROD) build --no-cache --force-rm --pull
+	$(DOKCOMPCMD) -f $(DKRFILEPROD) -f $(DKRFILEPRODOVR) build --no-cache --force-rm --pull
 
 prodstart:
 	@echo "\nStarting production mode...\n"
-	$(DOKCOMPCMD) -f $(DOCKERFILE) -f $(DOCKERFILEPROD) up -d
+	$(DOKCOMPCMD) -f $(DKRFILEPROD) -f $(DKRFILEPRODOVR) up -d
 
 prodstop:
 	@echo "\nstoping production mode...\n"
-	$(DOKCOMPCMD) -f $(DOCKERFILE) -f $(DOCKERFILEPROD) stop
+	$(DOKCOMPCMD) -f $(DKRFILEPROD) -f $(DKRFILEPRODOVR) stop
 
 proddown:
 	@echo "\nstoping production mode...\n"
-	$(DOKCOMPCMD) -f $(DOCKERFILE) -f $(DOCKERFILEPROD) down -v --remove-orphans --rmi all
+	$(DOKCOMPCMD) -f $(DKRFILEPROD) -f $(DKRFILEPRODOVR) down -v --remove-orphans --rmi all
 
 prodtop:
-	$(DOKCOMPCMD) -f $(DOCKERFILE) -f $(DOCKERFILEPROD) top
+	$(DOKCOMPCMD) -f $(DKRFILEPROD) -f $(DKRFILEPRODOVR) top
 
 prodps:
-	$(DOKCOMPCMD) -f $(DOCKERFILE) -f $(DOCKERFILEPROD) ps
+	$(DOKCOMPCMD) -f $(DKRFILEPROD) -f $(DKRFILEPRODOVR) ps
 
 prodlogs:
-	$(DOKCOMPCMD) -f $(DOCKERFILE) -f $(DOCKERFILEPROD) logs
+	$(DOKCOMPCMD) -f $(DKRFILEPROD) -f $(DKRFILEPRODOVR) logs
 
 prodevents:
-	$(DOKCOMPCMD) -f $(DOCKERFILE) -f $(DOCKERFILEPROD) events
+	$(DOKCOMPCMD) -f $(DKRFILEPROD) -f $(DKRFILEPRODOVR) events
 
 prodpause:
-	$(DOKCOMPCMD) -f $(DOCKERFILE) -f $(DOCKERFILEPROD) pause
+	$(DOKCOMPCMD) -f $(DKRFILEPROD) -f $(DKRFILEPRODOVR) pause
 
 produnpause:
-	$(DOKCOMPCMD) -f $(DOCKERFILE) -f $(DOCKERFILEPROD) unpause
+	$(DOKCOMPCMD) -f $(DKRFILEPROD) -f $(DKRFILEPRODOVR) unpause
 
 #
 # Development
