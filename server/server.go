@@ -17,7 +17,6 @@ import (
 var port string
 
 func init() {
-
 	// err := godotenv.Load()
 	// if err != nil {
 	// 	log.Fatal("Error reading .env file: ", err)
@@ -35,17 +34,25 @@ func SetupApp() {
 			}
 			return errors.New("Managed Error")
 		},
-		Concurrency:  	256 * 1024,
-		WriteTimeout: 	10 * time.Second,
-		ReadTimeout: 	10 * time.Second,
-		IdleTimeout:	10 * time.Second,
-		BodyLimit:		4 * 1024 * 1024,
+		Concurrency:          256 * 1024,
+		WriteTimeout:         10 * time.Second,
+		ReadTimeout:          10 * time.Second,
+		IdleTimeout:          10 * time.Second,
+		BodyLimit:            4 * 1024 * 1024,
 		CompressedFileSuffix: ".fiber.gz",
 	})
 
 	app.Use(limiter.New(limiter.Config{
-		Expiration: 10 * time.Second,
-		Max:      14,
+		Next:       nil,
+		Max:        1000,
+		Expiration: 1 * time.Second,
+		KeyGenerator: func(c *fiber.Ctx) string {
+			return c.IP()
+		},
+		LimitReached: func(c *fiber.Ctx) error {
+			c.Set("Content-Type", "application/json")
+			return c.Status(429).SendString(`{"message":"Too much request #blocked"}`)
+		},
 	}))
 
 	app.Use(recover.New())
@@ -69,10 +76,9 @@ func SetupApp() {
 
 	// fmt.Println(getOutboundIP())
 
-	log.Printf( "Server up and running: http://127.0.0.1:%s", port)
+	log.Printf("Server up and running: http://127.0.0.1:%s", port)
 	// log.Fatal(app.Server().ListenAndServeTLS(":"+sslport, "./certs/server.crt", "./certs/server.key"))
-	log.Fatal(app.Listen(":"+port))
-
+	log.Fatal(app.Listen(":" + port))
 }
 
 // func getOutboundIP() net.IP {
@@ -91,7 +97,7 @@ func setupRoutes(app *fiber.App) {
 	// give response when at /
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusOK).JSON(fiber.Map{
-			"success":  true,
+			"success": true,
 			"message": "You are at the endpoint 😉",
 		})
 	})
