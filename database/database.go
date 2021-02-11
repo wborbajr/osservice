@@ -7,17 +7,20 @@ import (
 	_ "github.com/nakagami/firebirdsql"
 )
 
-var dbara string
-var dbcwb string
-var dblon string
-var dbnat string
-var dbrec string
+var (
+	dbara string
+	dbcwb string
+	dblon string
+	dbnat string
+	dbrec string
+)
 
-var DB *sql.DB
-var err error
+var (
+	DB  *sql.DB
+	err error
+)
 
-func init(){
-
+func init() {
 	// err := godotenv.Load()
 	// if err != nil {
 	// 	log.Fatal("Error reading .env file: ", err)
@@ -28,11 +31,10 @@ func init(){
 	dblon = os.Getenv("LON")
 	dbnat = os.Getenv("NAT")
 	dbrec = os.Getenv("REC")
-
 }
 
 // KonnektAra connect to Aracaju database
-func KonnektAra() (error) {
+func KonnektAra() error {
 	DB, err = sql.Open("firebirdsql", dbara)
 
 	if err != nil {
@@ -47,7 +49,7 @@ func KonnektAra() (error) {
 }
 
 // KonnektCwb - connect to Curitiba database
-func KonnektCwb() (error) {
+func KonnektCwb() error {
 	DB, err = sql.Open("firebirdsql", dbcwb)
 
 	if err != nil {
@@ -62,7 +64,7 @@ func KonnektCwb() (error) {
 }
 
 // KonnektLon Connect to Londrina database
-func KonnektLon() (error) {
+func KonnektLon() error {
 	DB, err = sql.Open("firebirdsql", dblon)
 
 	if err != nil {
@@ -74,11 +76,10 @@ func KonnektLon() (error) {
 	}
 
 	return nil
-
 }
 
 // KonnektNat Connect to Natal database
-func KonnektNat() (error) {
+func KonnektNat() error {
 	DB, err = sql.Open("firebirdsql", dbnat)
 
 	if err != nil {
@@ -90,11 +91,10 @@ func KonnektNat() (error) {
 	}
 
 	return nil
-
 }
 
 // KonnektRec Connect to Recife database
-func KonnektRec() (error) {
+func KonnektRec() error {
 	DB, err = sql.Open("firebirdsql", dbrec)
 
 	if err != nil {
@@ -106,5 +106,4 @@ func KonnektRec() (error) {
 	}
 
 	return nil
-
 }

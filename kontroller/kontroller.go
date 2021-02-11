@@ -13,20 +13,21 @@ import (
 // https://play.golang.org/p/mWw59cjYPh7
 // https://stackoverflow.com/questions/27795036/create-chan-for-func-with-two-return-args#27795117
 
-var errAra error
-var errCwb error
-var errLon error
-var errNat error
-var errRec error
+var (
+	errAra error
+	errCwb error
+	errLon error
+	errNat error
+	errRec error
+)
 
 // GetAllOS - retrieve customer order service
 func GetAllOS(c *fiber.Ctx) error {
-
 	count := 0
 
 	// Parsing parameters
 	paramDoc := c.Params("doc")
-	paramOs  := c.Params("os")
+	paramOs := c.Params("os")
 
 	serviceOrder := model.ServiceOrder{}
 
@@ -47,69 +48,63 @@ func GetAllOS(c *fiber.Ctx) error {
 	}
 
 	if errAra == nil {
-		count ++
+		count++
 		log.Println("ARA Found")
 		log.Println(serviceOrder.IdOs, serviceOrder.IdCliente, serviceOrder.IdStatus)
-	}else {
+	} else {
 		log.Println("ARA NOT Found")
 	}
 	if errCwb == nil {
-		count ++
+		count++
 		log.Println("CWB Found")
 		log.Println(serviceOrder.IdOs, serviceOrder.IdCliente, serviceOrder.IdStatus)
-	}else {
+	} else {
 		log.Println("CWB NOT Found")
 	}
 	if errLon == nil {
-		count ++
+		count++
 		log.Println("LON Found")
 		log.Println(serviceOrder.IdOs, serviceOrder.IdCliente, serviceOrder.IdStatus)
-	}else {
+	} else {
 		log.Println("LON NOT Found")
 	}
 	if errNat == nil {
-		count ++
+		count++
 		log.Println("NAT Found")
 		log.Println(serviceOrder.IdOs, serviceOrder.IdCliente, serviceOrder.IdStatus)
-	}else {
+	} else {
 		log.Println("NAT NOT Found")
 	}
 	if errRec == nil {
-		count ++
+		count++
 		log.Println("REC Found")
 		log.Println(serviceOrder.IdOs, serviceOrder.IdCliente, serviceOrder.IdStatus)
-	}else {
+	} else {
 		log.Println("REC NOT Found")
 	}
 
 	if count != 0 {
 		if err := c.JSON(&fiber.Map{
-			"success": false,
-			"message": "Successfully fetched OSService",
+			"success":   false,
+			"message":   "Successfully fetched OSService",
 			"osservice": serviceOrder,
-			}); err != nil {
+		}); err != nil {
 			c.Status(500).JSON(&fiber.Map{
 				"success": false,
-				"message":  err,
-				})
+				"message": err,
+			})
 			return nil
 		}
-
 	} else {
 		c.Status(500).JSON(&fiber.Map{
 			"success": false,
 			"message": "Service Order not found!",
-			})
-
+		})
 	}
-
-
-
 
 	// if errAra != sql.ErrNoRows {
 
 	// }
-
 
 	// row, err := database.DB.Query("SELECT * FROM TB_OS WHERE ID_OS=$1 AND ID_CLIENTE=$2", paramOs, paramDoc)
 

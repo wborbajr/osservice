@@ -7,8 +7,6 @@ import (
 
 // OSServiceRoute - generate route path to API
 func OSServiceRoute(route fiber.Router) {
-
 	// Route
 	route.Get("/:doc/:os", kontroller.GetAllOS)
-
 }
