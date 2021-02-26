@@ -27,6 +27,9 @@ func init() {
 
 // SetupApp - Create GoFiber app
 func SetupApp() {
+
+	l := log.New(os.Stdout, "OSService", log.LstdFlags)
+
 	app := fiber.New(fiber.Config{
 		ErrorHandler: func(ctx *fiber.Ctx, err error) error {
 			if _, ok := err.(*fiber.Error); ok {
@@ -38,6 +41,7 @@ func SetupApp() {
 		WriteTimeout:         10 * time.Second,
 		ReadTimeout:          10 * time.Second,
 		IdleTimeout:          10 * time.Second,
+		ErrorLog:
 		BodyLimit:            4 * 1024 * 1024,
 		CompressedFileSuffix: ".fiber.gz",
 	})
